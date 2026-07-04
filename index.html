@@ -9,6 +9,7 @@
 <style>
   :root{
     --ink: #14213D;
+    --heading: #14213D;
     --gold: #E8A33D;
     --gold-dark: #C6822A;
     --green: #2F6F4E;
@@ -22,6 +23,36 @@
     --shadow: 0 8px 24px rgba(20,33,61,0.08);
   }
 
+  html[data-theme="dark"]{
+    --heading: #F2F5FA;
+    --paper: #12161F;
+    --white: #1B212D;
+    --text: #E7ECF3;
+    --text-soft: #9BA6B8;
+    --line: #2B3140;
+    --shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  html[data-theme="forest"]{
+    --heading: #14213D;
+    --paper: #F1F7F1;
+    --white: #FFFFFF;
+    --text: #1E2430;
+    --text-soft: #57685D;
+    --line: #D9E7DA;
+    --gold: #3E8361;
+    --gold-dark: #2F6F4E;
+  }
+  html[data-theme="sunrise"]{
+    --heading: #14213D;
+    --paper: #FFF7ED;
+    --white: #FFFFFF;
+    --text: #1E2430;
+    --text-soft: #7A6A57;
+    --line: #F0DFC9;
+    --gold: #E8763D;
+    --gold-dark: #C65A26;
+  }
+
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
@@ -30,8 +61,9 @@
     color:var(--text);
     line-height:1.5;
     -webkit-font-smoothing:antialiased;
+    transition:background .25s ease, color .25s ease;
   }
-  h1,h2,h3,.display{font-family:'Sora', sans-serif; font-weight:700; color:var(--ink);}
+  h1,h2,h3,.display{font-family:'Sora', sans-serif; font-weight:700; color:var(--heading);}
   .mono{font-family:'JetBrains Mono', monospace;}
   a{color:inherit;}
   img,svg{display:block; max-width:100%;}
@@ -265,6 +297,87 @@
   .mc-card li{font-size:0.85rem; color:#EAEFF7; display:flex; gap:8px;}
   .mc-card li::before{content:'—'; color:var(--gold);}
 
+  /* ===== FIRST AID ===== */
+  .accordion{max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:12px;}
+  .accordion-item{
+    background:var(--white); border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  }
+  .accordion-head{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:16px 20px; cursor:pointer; font-weight:600; font-size:0.98rem;
+  }
+  .accordion-head .icon{font-size:1.3rem;}
+  .accordion-head .chev{transition:transform .2s ease; color:var(--text-soft);}
+  .accordion-item.open .chev{transform:rotate(180deg);}
+  .accordion-body{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .accordion-item.open .accordion-body{max-height:400px;}
+  .accordion-body-inner{padding:0 20px 18px; color:var(--text-soft); font-size:0.92rem; line-height:1.6;}
+  .accordion-body-inner strong{color:var(--text);}
+
+  /* ===== HEALTH TIPS ===== */
+  .tips-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;}
+  .tip-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; box-shadow:var(--shadow);
+  }
+  .tip-tag{
+    display:inline-block; font-family:'JetBrains Mono'; font-size:0.68rem; text-transform:uppercase;
+    letter-spacing:0.05em; background:#EAF0FA; color:var(--gold-dark); padding:3px 9px; border-radius:999px; margin-bottom:10px;
+  }
+  .tip-card h3{font-size:1rem; margin-bottom:6px;}
+  .tip-card p{color:var(--text-soft); font-size:0.88rem;}
+
+  /* ===== APPOINTMENT ===== */
+  .appt-form{
+    max-width:560px; margin:0 auto; background:var(--white); border:1px solid var(--line);
+    border-radius:var(--radius); padding:28px; box-shadow:var(--shadow);
+  }
+  .appt-row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .appt-confirm{
+    max-width:560px; margin:16px auto 0; background:#E7F1EC; border:1px solid #BFDCC9;
+    border-radius:12px; padding:18px 20px; font-size:0.9rem; color:var(--green); display:none;
+  }
+  .appt-disclaimer{max-width:560px; margin:14px auto 0; font-size:0.78rem; color:var(--text-soft); text-align:center;}
+
+  /* ===== PHARMACY ===== */
+  .demo-banner{
+    max-width:800px; margin:0 auto 20px; background:#FDF2E3; border:1px solid #F0DBB0;
+    color:#8A5A15; font-size:0.85rem; padding:12px 18px; border-radius:10px; text-align:center;
+  }
+  .pharmacy-panel{
+    max-width:800px; margin:0 auto; background:var(--white); border:1px solid var(--line);
+    border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);
+  }
+  .pharmacy-controls{display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .pharmacy-controls select, .pharmacy-controls input{
+    flex:1; min-width:160px; border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    font-family:inherit; background:var(--paper); font-size:0.9rem;
+  }
+  .stock-row{
+    display:flex; justify-content:space-between; align-items:center; padding:12px 0;
+    border-bottom:1px solid var(--line); font-size:0.92rem;
+  }
+  .stock-row:last-child{border-bottom:none;}
+  .stock-badge{font-size:0.72rem; font-family:'JetBrains Mono'; padding:3px 10px; border-radius:999px;}
+  .stock-in{background:#E7F1EC; color:var(--green);}
+  .stock-low{background:#FDF2E3; color:#B8791E;}
+  .stock-out{background:#FCEDEC; color:var(--red);}
+
+  /* ===== COMMUNITY Q&A ===== */
+  .qa-wrap{max-width:800px; margin:0 auto;}
+  .qa-form{display:flex; gap:10px; margin-bottom:24px;}
+  .qa-form textarea{
+    flex:1; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-family:inherit;
+    font-size:0.9rem; background:var(--white); min-height:60px; resize:vertical;
+  }
+  .qa-item{
+    background:var(--white); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:12px;
+  }
+  .qa-question{font-weight:600; font-size:0.94rem; margin-bottom:6px;}
+  .qa-meta{font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--text-soft); margin-bottom:10px;}
+  .qa-answer{font-size:0.88rem; color:var(--text-soft); background:var(--paper); border-radius:8px; padding:10px 14px; margin-top:8px;}
+  .qa-note{font-size:0.78rem; color:var(--text-soft); text-align:center; margin-top:8px;}
+
   /* ===== FOOTER ===== */
   footer{background:var(--ink); color:#AEB9CC; padding:40px 0 24px; font-size:0.85rem;}
   .footer-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; align-items:center;}
@@ -278,6 +391,9 @@
     .records-wrap{grid-template-columns:1fr;}
     .mc-grid{grid-template-columns:1fr;}
     #facility-results{grid-template-columns:1fr;}
+    .tips-grid{grid-template-columns:1fr;}
+    .appt-row{grid-template-columns:1fr;}
+    .qa-form{flex-direction:column;}
     .nav-links{
       position:fixed; top:60px; left:0; right:0; background:var(--ink);
       flex-direction:column; align-items:flex-start; padding:18px 24px; gap:16px;
@@ -317,6 +433,11 @@
       <a href="#findcare" data-i18n="nav_findcare">Find Care</a>
       <a href="#records" data-i18n="nav_records">My Records</a>
       <a href="#maternal" data-i18n="nav_maternal">Maternal &amp; Child</a>
+      <a href="#firstaid" data-i18n="nav_firstaid">First Aid</a>
+      <a href="#tips" data-i18n="nav_tips">Health Tips</a>
+      <a href="#appointment" data-i18n="nav_appointment">Book Visit</a>
+      <a href="#pharmacy" data-i18n="nav_pharmacy">Pharmacy</a>
+      <a href="#community" data-i18n="nav_community">Q&amp;A</a>
     </div>
     <div style="display:flex; align-items:center; gap:14px;">
       <div class="lang-switch" role="group" aria-label="Choose language">
@@ -324,6 +445,12 @@
         <button class="lang-btn" data-lang="ha">HA</button>
         <button class="lang-btn" data-lang="yo">YO</button>
         <button class="lang-btn" data-lang="ig">IG</button>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Choose theme">
+        <button class="lang-btn theme-btn active" data-theme="light" title="Light">☀️</button>
+        <button class="lang-btn theme-btn" data-theme="dark" title="Dark">🌙</button>
+        <button class="lang-btn theme-btn" data-theme="forest" title="Forest">🌿</button>
+        <button class="lang-btn theme-btn" data-theme="sunrise" title="Sunrise">🌅</button>
       </div>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
     </div>
@@ -519,6 +646,115 @@
       </div>
     </div>
   </section>
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== FIRST AID ===== -->
+  <section id="firstaid">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="firstaid_eyebrow">Emergency essentials</div>
+        <h2 data-i18n="firstaid_head">First Aid Guides</h2>
+        <p data-i18n="firstaid_sub">Quick, general steps while you get to professional help. Tap a topic to expand.</p>
+      </div>
+      <div class="accordion" id="firstaid-accordion"></div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== HEALTH TIPS ===== -->
+  <section id="tips">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="tips_eyebrow">Stay ahead of illness</div>
+        <h2 data-i18n="tips_head">Health Tips</h2>
+        <p data-i18n="tips_sub">Simple, everyday habits that make a real difference.</p>
+      </div>
+      <div class="tips-grid" id="tips-grid"></div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== APPOINTMENT REQUEST ===== -->
+  <section id="appointment">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="appt_eyebrow">Plan a visit</div>
+        <h2 data-i18n="appt_head">Request an Appointment</h2>
+        <p data-i18n="appt_sub">Send a visit request — a facility staff member will follow up to confirm.</p>
+      </div>
+      <div class="appt-form">
+        <div class="field">
+          <label data-i18n="appt_name_label">Full name</label>
+          <input type="text" id="appt-name" placeholder="Your name">
+        </div>
+        <div class="appt-row">
+          <div class="field">
+            <label data-i18n="appt_phone_label">Phone number</label>
+            <input type="tel" id="appt-phone" placeholder="080...">
+          </div>
+          <div class="field">
+            <label data-i18n="appt_date_label">Preferred date</label>
+            <input type="date" id="appt-date">
+          </div>
+        </div>
+        <div class="field">
+          <label data-i18n="appt_facility_label">Facility</label>
+          <select id="appt-facility"></select>
+        </div>
+        <div class="field">
+          <label data-i18n="appt_reason_label">Reason for visit</label>
+          <textarea id="appt-reason" placeholder="e.g. Antenatal check-up, fever, follow-up..."></textarea>
+        </div>
+        <button class="btn btn-primary" id="appt-submit" style="width:100%; justify-content:center;" data-i18n="appt_submit_btn">Send request</button>
+      </div>
+      <div class="appt-confirm" id="appt-confirm"></div>
+      <p class="appt-disclaimer" data-i18n="appt_disclaimer">This sends a request only — it is not an automatic confirmed booking. A facility may contact you to confirm.</p>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== PHARMACY STOCK CHECKER ===== -->
+  <section id="pharmacy">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="pharmacy_eyebrow">Before you travel</div>
+        <h2 data-i18n="pharmacy_head">Medicine Availability</h2>
+        <p data-i18n="pharmacy_sub">Check common medicines by facility.</p>
+      </div>
+      <div class="demo-banner" data-i18n="pharmacy_demo_note">Demo feature: this shows sample data for illustration, not live pharmacy stock. Always call ahead to confirm.</div>
+      <div class="pharmacy-panel">
+        <div class="pharmacy-controls">
+          <select id="pharmacy-facility"></select>
+          <input type="text" id="pharmacy-search" data-i18n-placeholder="pharmacy_search_placeholder" placeholder="Search a medicine, e.g. Paracetamol">
+        </div>
+        <div id="pharmacy-results"></div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== COMMUNITY Q&A ===== -->
+  <section id="community">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="community_eyebrow">Ask, learn, share</div>
+        <h2 data-i18n="community_head">Ask a Health Worker</h2>
+        <p data-i18n="community_sub" >Post a general health question. Saved on this device for now.</p>
+      </div>
+      <div class="qa-wrap">
+        <div class="qa-form">
+          <textarea id="qa-input" data-i18n-placeholder="community_placeholder" placeholder="Type your question..."></textarea>
+          <button class="btn btn-green" id="qa-submit" data-i18n="community_submit_btn">Post</button>
+        </div>
+        <div id="qa-list"></div>
+        <p class="qa-note" data-i18n="community_note">Questions here are saved only on your device for this demo. A live version would connect everyone through a shared server.</p>
+      </div>
+    </div>
+  </section>
 
 </main>
 
@@ -541,6 +777,7 @@
 const translations = {
   en: {
     nav_checker: "Symptom Guidance", nav_findcare: "Find Care", nav_records: "My Records", nav_maternal: "Maternal & Child",
+    nav_firstaid: "First Aid", nav_tips: "Health Tips", nav_appointment: "Book Visit", nav_pharmacy: "Pharmacy", nav_community: "Q&A",
     eyebrow: "Built for Nigeria, in your language",
     hero_title: "Bridging People to <span>Healthcare</span>",
     hero_sub: "Check symptoms, find nearby doctors, keep your health records, and get maternal & child health guidance — in English, Hausa, Yoruba or Igbo. Works on any phone.",
@@ -568,12 +805,26 @@ const translations = {
     mc2_title: "Child health", mc2_sub: "Track growth milestones and common childhood illnesses.",
     mc2_li1: "Immunization schedule", mc2_li2: "Growth & feeding milestones", mc2_li3: "Common illness guidance",
     footer_text: "Not a substitute for professional medical care. Always consult a qualified health worker.",
+    firstaid_eyebrow: "Emergency essentials", firstaid_head: "First Aid Guides", firstaid_sub: "Quick, general steps while you get to professional help. Tap a topic to expand.",
+    tips_eyebrow: "Stay ahead of illness", tips_head: "Health Tips", tips_sub: "Simple, everyday habits that make a real difference.",
+    appt_eyebrow: "Plan a visit", appt_head: "Request an Appointment", appt_sub: "Send a visit request — a facility staff member will follow up to confirm.",
+    appt_name_label: "Full name", appt_phone_label: "Phone number", appt_date_label: "Preferred date", appt_facility_label: "Facility",
+    appt_reason_label: "Reason for visit", appt_submit_btn: "Send request",
+    appt_disclaimer: "This sends a request only — it is not an automatic confirmed booking. A facility may contact you to confirm.",
+    appt_confirm_msg: "Request saved. Please also call the facility directly to confirm your visit, since this demo does not send it automatically.",
+    pharmacy_eyebrow: "Before you travel", pharmacy_head: "Medicine Availability", pharmacy_sub: "Check common medicines by facility.",
+    pharmacy_demo_note: "Demo feature: this shows sample data for illustration, not live pharmacy stock. Always call ahead to confirm.",
+    pharmacy_search_placeholder: "Search a medicine, e.g. Paracetamol",
+    community_eyebrow: "Ask, learn, share", community_head: "Ask a Health Worker", community_sub: "Post a general health question. Saved on this device for now.",
+    community_placeholder: "Type your question...", community_submit_btn: "Post",
+    community_note: "Questions here are saved only on your device for this demo. A live version would connect everyone through a shared server.",
     emergency_text: "In a medical emergency, call your local emergency number now.", emergency_btn: "Emergency numbers",
     emergency_title: "Emergency numbers (Nigeria)",
     record_placeholder_title: "e.g. Headache, Paracetamol, Blood pressure"
   },
   ha: {
     nav_checker: "Jagoran Alamun Rashin Lafiya", nav_findcare: "Nemo Kiwon Lafiya", nav_records: "Bayanaina", nav_maternal: "Uwa da Yara",
+    nav_firstaid: "Agajin Gaggawa", nav_tips: "Shawarwarin Lafiya", nav_appointment: "Nemi Ziyara", nav_pharmacy: "Kantin Magani", nav_community: "Tambaya",
     eyebrow: "An gina domin Najeriya, cikin harshenka",
     hero_title: "Haɗa Mutane da <span>Kiwon Lafiya</span>",
     hero_sub: "Bincika alamun rashin lafiya, nemo likitoci kusa da kai, ajiye bayanan lafiyarka, kuma sami jagora kan lafiyar uwa da yara — cikin Turanci, Hausa, Yoruba ko Igbo. Yana aiki a kowane wayar hannu.",
@@ -607,6 +858,7 @@ const translations = {
   },
   yo: {
     nav_checker: "Itọsọna Àpẹẹrẹ Àìsàn", nav_findcare: "Wa Ìtọ́jú", nav_records: "Àkọsílẹ̀ Mi", nav_maternal: "Ìyá àti Ọmọ",
+    nav_firstaid: "Ìrànlọ́wọ́ Kánjú", nav_tips: "Ìmọ̀ràn Ìlera", nav_appointment: "Wá Ìbẹ̀wò", nav_pharmacy: "Ilé Ìtajà Oògùn", nav_community: "Ìbéèrè",
     eyebrow: "A kọ́ fún Nàìjíríà, ní èdè rẹ",
     hero_title: "Ìsopọ̀ Ènìyàn sí <span>Ìlera</span>",
     hero_sub: "Ṣàyẹ̀wò àpẹẹrẹ àìsàn, wa dókítà tó wà nítòsí, tọ́jú àkọsílẹ̀ ìlera rẹ, kí o sì gba ìtọ́ni lórí ìlera ìyá àti ọmọ — ní Gẹ̀ẹ́sì, Hausa, Yorùbá tàbí Igbo. Ó ń ṣiṣẹ́ lórí fóònù kankan.",
@@ -640,6 +892,7 @@ const translations = {
   },
   ig: {
     nav_checker: "Nduzi Mgbaàmà Ọrịa", nav_findcare: "Chọta Ọgwụgwọ", nav_records: "Ndekọ M", nav_maternal: "Nne na Nwa",
+    nav_firstaid: "Enyemaka Mberede", nav_tips: "Ndụmọdụ Ahụike", nav_appointment: "Chọọ Nleta", nav_pharmacy: "Ụlọ Ahịa Ọgwụ", nav_community: "Ajụjụ",
     eyebrow: "Emere maka Naịjirịa, n'asụsụ gị",
     hero_title: "Ijikọta Ndị Mmadụ na <span>Ahụike</span>",
     hero_sub: "Nyochaa mgbaàmà ọrịa, chọta dọkịta dị nso, debe ndekọ ahụike gị, ma nweta nduzi ahụike nne na nwa — n'asụsụ Bekee, Hausa, Yoruba ma ọ bụ Igbo. Ọ na-arụ ọrụ na ekwentị ọ bụla.",
@@ -1180,8 +1433,227 @@ function renderRecords(){
   });
 }
 
+// ---------- 8. THEME SWITCHER ----------
+let currentTheme = "light";
+try {
+  const savedTheme = localStorage.getItem("healthbridge_theme");
+  if(savedTheme) currentTheme = savedTheme;
+} catch(e) { /* fall back to default */ }
+
+function applyTheme(theme){
+  currentTheme = theme;
+  document.documentElement.setAttribute("data-theme", theme === "light" ? "" : theme);
+  document.querySelectorAll(".theme-btn").forEach(function(btn){
+    btn.classList.toggle("active", btn.getAttribute("data-theme") === theme);
+  });
+  try { localStorage.setItem("healthbridge_theme", theme); } catch(e) { /* ignore */ }
+}
+
+document.querySelectorAll(".theme-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    applyTheme(btn.getAttribute("data-theme"));
+  });
+});
+
+// ---------- 9. FIRST AID GUIDES ----------
+const FIRST_AID_TOPICS = [
+  { icon: "🫁", title: "Choking", body: "If they can cough or speak, encourage coughing. If they cannot breathe, cough, or speak: give 5 firm back blows between the shoulder blades, then 5 abdominal thrusts (Heimlich manoeuvre). Repeat until it clears or help arrives. Call for emergency help immediately if the person turns blue or loses consciousness." },
+  { icon: "🔥", title: "Burns", body: "Cool the burn under cool (not ice-cold) running water for at least 10-20 minutes. Remove any tight clothing or jewellery near the area before it swells. Do not apply butter, oil, or toothpaste. Cover loosely with clean, non-stick cloth. Seek medical care urgently for large, deep, or facial burns." },
+  { icon: "🐍", title: "Snake bite", body: "Keep the person calm and still to slow venom spread. Remove tight items like rings near the bite. Keep the bitten limb lower than the heart if possible. Do NOT cut the wound, suck out venom, or apply a tight tourniquet. Get to a hospital immediately — antivenom may be needed." },
+  { icon: "🩸", title: "Severe bleeding", body: "Apply firm, direct pressure to the wound with a clean cloth. Keep pressing without lifting to check. Raise the injured area above heart level if possible. Call for emergency help if bleeding does not slow, or if it's a deep wound, or from the head, neck, or abdomen." },
+  { icon: "😵", title: "Fainting / unconsciousness", body: "Lay the person flat and raise their legs slightly if they feel faint. If unconscious but breathing, place them on their side (recovery position). If not breathing normally, begin CPR if trained and call for emergency help immediately." },
+  { icon: "🌡️", title: "Very high fever", body: "Remove excess clothing and sponge the skin with lukewarm (not cold) water. Keep the person hydrated with water or oral rehydration solution. Seek urgent care if fever is very high, lasts more than 2 days, or comes with stiff neck, rash, or confusion — this could be malaria, meningitis or another serious infection." }
+];
+
+function renderFirstAid(){
+  const wrap = document.getElementById("firstaid-accordion");
+  wrap.innerHTML = "";
+  FIRST_AID_TOPICS.forEach(function(topic, i){
+    const item = document.createElement("div");
+    item.className = "accordion-item";
+    item.innerHTML =
+      '<div class="accordion-head">' +
+        '<span><span class="icon">' + topic.icon + '</span> ' + topic.title + '</span>' +
+        '<span class="chev">▾</span>' +
+      '</div>' +
+      '<div class="accordion-body"><div class="accordion-body-inner">' + topic.body + '</div></div>';
+    item.querySelector(".accordion-head").addEventListener("click", function(){
+      item.classList.toggle("open");
+    });
+    wrap.appendChild(item);
+  });
+}
+
+// ---------- 10. HEALTH TIPS ----------
+const HEALTH_TIPS = [
+  { tag: "Malaria prevention", title: "Sleep under a treated net", body: "Insecticide-treated mosquito nets remain one of the most effective ways to prevent malaria, especially for children and pregnant women." },
+  { tag: "Hygiene", title: "Wash hands at key moments", body: "Wash with soap before eating or cooking, and after using the toilet, to cut down on diarrhoea and infections." },
+  { tag: "Maternal health", title: "Attend antenatal visits", body: "Regular antenatal check-ups catch problems early and track both mother and baby's health through pregnancy." },
+  { tag: "Nutrition", title: "Eat a variety of local foods", body: "Combining grains, beans, vegetables, and fruits gives a more complete range of nutrients than relying on one staple." },
+  { tag: "Child health", title: "Keep vaccines on schedule", body: "Routine immunization protects children from preventable diseases like measles, polio, and whooping cough." },
+  { tag: "Water safety", title: "Boil or treat drinking water", body: "Where clean water isn't guaranteed, boiling or using water treatment tablets reduces the risk of typhoid and cholera." }
+];
+
+function renderHealthTips(){
+  const grid = document.getElementById("tips-grid");
+  grid.innerHTML = "";
+  HEALTH_TIPS.forEach(function(tip){
+    const card = document.createElement("div");
+    card.className = "tip-card";
+    card.innerHTML =
+      '<span class="tip-tag">' + tip.tag + '</span>' +
+      '<h3>' + tip.title + '</h3>' +
+      '<p>' + tip.body + '</p>';
+    grid.appendChild(card);
+  });
+}
+
+// ---------- 11. APPOINTMENT REQUEST ----------
+function populateApptFacility(){
+  const select = document.getElementById("appt-facility");
+  select.innerHTML = "";
+  FACILITIES.forEach(function(f){
+    const opt = document.createElement("option");
+    opt.value = f.name;
+    opt.textContent = f.name + " — " + f.lga + ", " + f.state;
+    select.appendChild(opt);
+  });
+}
+
+document.getElementById("appt-submit").addEventListener("click", function(){
+  const name = document.getElementById("appt-name").value.trim();
+  const phone = document.getElementById("appt-phone").value.trim();
+  const date = document.getElementById("appt-date").value;
+  const facility = document.getElementById("appt-facility").value;
+  const reason = document.getElementById("appt-reason").value.trim();
+
+  if(!name || !phone || !date){
+    alert("Please fill in your name, phone number, and preferred date.");
+    return;
+  }
+
+  const confirmBox = document.getElementById("appt-confirm");
+  const dict = translations[currentLang];
+  confirmBox.style.display = "block";
+  confirmBox.innerHTML =
+    "<strong>" + (dict.appt_confirm_msg || "Request saved.") + "</strong><br><br>" +
+    "<strong>Name:</strong> " + name + "<br>" +
+    "<strong>Phone:</strong> " + phone + "<br>" +
+    "<strong>Date:</strong> " + date + "<br>" +
+    "<strong>Facility:</strong> " + facility + "<br>" +
+    (reason ? "<strong>Reason:</strong> " + reason : "");
+
+  document.getElementById("appt-name").value = "";
+  document.getElementById("appt-phone").value = "";
+  document.getElementById("appt-date").value = "";
+  document.getElementById("appt-reason").value = "";
+});
+
+// ---------- 12. PHARMACY STOCK CHECKER (DEMO DATA ONLY) ----------
+const MEDICINE_STOCK = ["Paracetamol", "Amoxicillin", "ORS (Oral Rehydration Salts)", "Artemether-Lumefantrine (malaria)", "Ibuprofen", "Multivitamins", "Zinc tablets", "Folic acid"];
+
+function seededStatus(seedStr){
+  // Deterministic pseudo-status so results stay consistent per facility+medicine, purely for demo purposes
+  let hash = 0;
+  for(let i = 0; i < seedStr.length; i++){ hash = (hash * 31 + seedStr.charCodeAt(i)) % 997; }
+  if(hash % 3 === 0) return "out";
+  if(hash % 3 === 1) return "low";
+  return "in";
+}
+
+function populatePharmacyFacility(){
+  const select = document.getElementById("pharmacy-facility");
+  select.innerHTML = "";
+  FACILITIES.forEach(function(f){
+    const opt = document.createElement("option");
+    opt.value = f.name;
+    opt.textContent = f.name;
+    select.appendChild(opt);
+  });
+}
+
+function renderPharmacyStock(){
+  const facility = document.getElementById("pharmacy-facility").value;
+  const search = document.getElementById("pharmacy-search").value.trim().toLowerCase();
+  const results = document.getElementById("pharmacy-results");
+  results.innerHTML = "";
+
+  const list = MEDICINE_STOCK.filter(function(m){ return !search || m.toLowerCase().indexOf(search) !== -1; });
+
+  if(list.length === 0){
+    results.innerHTML = '<p style="color:var(--text-soft);font-size:0.88rem;">No matching medicine in the demo list.</p>';
+    return;
+  }
+
+  list.forEach(function(med){
+    const status = seededStatus(facility + med);
+    const badgeClass = status === "in" ? "stock-in" : status === "low" ? "stock-low" : "stock-out";
+    const badgeText = status === "in" ? "In stock" : status === "low" ? "Low stock" : "Out of stock";
+    const row = document.createElement("div");
+    row.className = "stock-row";
+    row.innerHTML = '<span>' + med + '</span><span class="stock-badge ' + badgeClass + '">' + badgeText + '</span>';
+    results.appendChild(row);
+  });
+}
+
+document.getElementById("pharmacy-facility").addEventListener("change", renderPharmacyStock);
+document.getElementById("pharmacy-search").addEventListener("input", renderPharmacyStock);
+
+// ---------- 13. COMMUNITY Q&A (DEVICE-LOCAL ONLY) ----------
+let qaPosts = [];
+try {
+  const savedQA = localStorage.getItem("healthbridge_qa");
+  if(savedQA) qaPosts = JSON.parse(savedQA);
+} catch(e) { qaPosts = []; }
+
+const STOCK_ANSWERS = [
+  "Thanks for asking — a health worker will typically want to examine you directly for something like this. In the meantime, the Symptom Guidance tool above can give general pointers.",
+  "This is a good question to bring to your nearest clinic — use the Find Care section to locate one close to you.",
+  "General self-care (rest, fluids, hygiene) helps with many mild symptoms, but please see a health worker if things don't improve within a couple of days."
+];
+
+function saveQAToStorage(){
+  try { localStorage.setItem("healthbridge_qa", JSON.stringify(qaPosts)); } catch(e) { /* ignore */ }
+}
+
+function renderQA(){
+  const list = document.getElementById("qa-list");
+  list.innerHTML = "";
+  qaPosts.forEach(function(post){
+    const item = document.createElement("div");
+    item.className = "qa-item";
+    item.innerHTML =
+      '<div class="qa-question">' + post.question + '</div>' +
+      '<div class="qa-meta">' + post.date + '</div>' +
+      '<div class="qa-answer">' + post.answer + '</div>';
+    list.appendChild(item);
+  });
+}
+
+document.getElementById("qa-submit").addEventListener("click", function(){
+  const input = document.getElementById("qa-input");
+  const q = input.value.trim();
+  if(!q) return;
+  const answer = STOCK_ANSWERS[Math.floor(Math.random() * STOCK_ANSWERS.length)];
+  qaPosts.unshift({
+    question: q,
+    answer: answer,
+    date: new Date().toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+  });
+  input.value = "";
+  saveQAToStorage();
+  renderQA();
+});
+
 // ---------- 7. INIT ----------
 populateStateSelect();
+populateApptFacility();
+populatePharmacyFacility();
+renderFirstAid();
+renderHealthTips();
+renderPharmacyStock();
+renderQA();
+applyTheme(currentTheme);
 applyTranslations("en");
 </script>
 </body>
