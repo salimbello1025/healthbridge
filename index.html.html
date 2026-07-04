@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthBridge AI — Bridging People to Healthcare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #14213D;
+    --gold: #E8A33D;
+    --gold-dark: #C6822A;
+    --green: #2F6F4E;
+    --paper: #F7F2E7;
+    --white: #FFFFFF;
+    --red: #C23B3B;
+    --text: #1E2430;
+    --text-soft: #5B6472;
+    --line: #E4DCC9;
+    --radius: 14px;
+    --shadow: 0 8px 24px rgba(20,33,61,0.08);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--paper);
+    color:var(--text);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Sora', sans-serif; font-weight:700; color:var(--ink);}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;}
+  img,svg{display:block; max-width:100%;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  .container{max-width:1100px; margin:0 auto; padding:0 24px;}
+
+  /* Skip link / focus visibility */
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:3px solid var(--gold-dark); outline-offset:2px;
+  }
+  .skip-link{
+    position:absolute; left:-999px; top:0; background:var(--ink); color:#fff;
+    padding:10px 16px; border-radius:0 0 8px 0; z-index:200;
+  }
+  .skip-link:focus{left:0;}
+
+  /* ===== Bridge divider signature element ===== */
+  .bridge-divider{width:100%; height:34px; display:block; margin:0 auto;}
+  .bridge-divider path{fill:none; stroke:var(--line); stroke-width:2;}
+
+  /* ===== NAV ===== */
+  .nav{
+    position:sticky; top:0; z-index:100;
+    background:rgba(20,33,61,0.97);
+    backdrop-filter:blur(6px);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; max-width:1100px; margin:0 auto;
+  }
+  .brand{display:flex; align-items:center; gap:10px; color:#fff; font-family:'Sora'; font-weight:800; font-size:1.15rem; letter-spacing:-0.01em;}
+  .brand-mark{width:30px; height:30px; flex-shrink:0;}
+  .nav-links{display:flex; align-items:center; gap:22px;}
+  .nav-links a{color:#EAEFF7; text-decoration:none; font-size:0.92rem; font-weight:500;}
+  .nav-links a:hover{color:var(--gold);}
+  .lang-switch{
+    display:flex; gap:4px; background:rgba(255,255,255,0.08);
+    padding:4px; border-radius:999px;
+  }
+  .lang-btn{
+    background:transparent; color:#C9D3E4; font-size:0.78rem; font-weight:600;
+    padding:6px 12px; border-radius:999px; transition:all .15s ease;
+  }
+  .lang-btn.active{background:var(--gold); color:var(--ink);}
+  .lang-btn:hover:not(.active){color:#fff;}
+  .nav-toggle{display:none; background:transparent; color:#fff; font-size:1.5rem;}
+
+  /* ===== EMERGENCY BAR ===== */
+  .emergency-bar{
+    background:var(--red); color:#fff; text-align:center;
+    padding:9px 16px; font-size:0.85rem; font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap;
+  }
+  .emergency-bar button{
+    background:#fff; color:var(--red); padding:5px 14px; border-radius:999px;
+    font-weight:700; font-size:0.8rem;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    background:var(--ink);
+    color:#fff;
+    padding:64px 0 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1100px; margin:0 auto; padding:0 24px 40px;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    color:var(--gold); font-family:'JetBrains Mono'; font-size:0.78rem;
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:18px;
+  }
+  .eyebrow::before{content:''; width:18px; height:2px; background:var(--gold); display:inline-block;}
+  .hero h1{
+    font-size:clamp(2.1rem, 4.2vw, 3.2rem); color:#fff; line-height:1.08;
+    letter-spacing:-0.02em; margin-bottom:20px;
+  }
+  .hero h1 span{color:var(--gold);}
+  .hero p{color:#C9D3E4; font-size:1.05rem; max-width:480px; margin-bottom:28px;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 26px; border-radius:999px; font-weight:600; font-size:0.95rem;
+    text-decoration:none; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--gold); color:var(--ink); box-shadow:0 6px 20px rgba(232,163,61,0.35);}
+  .btn-ghost{background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.25);}
+  .btn-green{background:var(--green); color:#fff; box-shadow:0 6px 20px rgba(47,111,78,0.3);}
+
+  .hero-art{position:relative; height:100%;}
+  .bridge-svg{width:100%; height:auto;}
+
+  .hero-stats{
+    display:flex; gap:0; border-top:1px solid rgba(255,255,255,0.12);
+    max-width:1100px; margin:0 auto;
+  }
+  .hero-stat{
+    flex:1; padding:20px 24px; border-right:1px solid rgba(255,255,255,0.12);
+  }
+  .hero-stat:last-child{border-right:none;}
+  .hero-stat .num{font-family:'Sora'; font-weight:800; font-size:1.5rem; color:var(--gold);}
+  .hero-stat .label{font-size:0.78rem; color:#AEB9CC; margin-top:2px;}
+
+  /* ===== SECTION SHELL ===== */
+  section{padding:64px 0;}
+  .section-head{max-width:640px; margin:0 auto 40px; text-align:center;}
+  .section-head .eyebrow{color:var(--gold-dark); justify-content:center;}
+  .section-head .eyebrow::before{background:var(--gold-dark);}
+  .section-head h2{font-size:clamp(1.6rem, 3vw, 2.1rem); margin-bottom:12px;}
+  .section-head p{color:var(--text-soft); font-size:1rem;}
+
+  /* ===== FEATURE CARDS ===== */
+  .features-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;
+  }
+  .feature-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:28px 24px; box-shadow:var(--shadow); transition:transform .15s ease;
+  }
+  .feature-card:hover{transform:translateY(-4px);}
+  .feature-icon{
+    width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem; margin-bottom:16px;
+  }
+  .feature-card h3{font-size:1.1rem; margin-bottom:8px;}
+  .feature-card p{color:var(--text-soft); font-size:0.92rem;}
+
+  /* ===== SYMPTOM CHECKER ===== */
+  .checker-panel{
+    background:var(--white); border:1px solid var(--line); border-radius:20px;
+    box-shadow:var(--shadow); max-width:720px; margin:0 auto; overflow:hidden;
+  }
+  .checker-head{
+    background:var(--ink); color:#fff; padding:18px 22px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .checker-head .dot{width:10px; height:10px; border-radius:50%; background:var(--green);}
+  .checker-head strong{font-family:'Sora'; font-size:0.98rem;}
+  .checker-head span{font-size:0.78rem; color:#AEB9CC; margin-left:auto;}
+  #chat-log{
+    height:340px; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px;
+  }
+  .msg{max-width:80%; padding:12px 16px; border-radius:14px; font-size:0.92rem; line-height:1.45;}
+  .msg.bot{background:var(--paper); border:1px solid var(--line); align-self:flex-start; border-bottom-left-radius:4px;}
+  .msg.user{background:var(--ink); color:#fff; align-self:flex-end; border-bottom-right-radius:4px;}
+  .msg.flag{background:#FCEDEC; border:1px solid #F0C7C4; color:var(--red); font-weight:600;}
+  .checker-input{
+    display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--line);
+  }
+  .checker-input input{
+    flex:1; border:1px solid var(--line); border-radius:999px; padding:12px 18px; font-size:0.92rem; font-family:inherit;
+  }
+  .checker-input button{
+    background:var(--gold); color:var(--ink); width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+  }
+  #chat-mic{background:var(--white); border:1px solid var(--line); color:var(--ink);}
+  #chat-mic.recording{background:var(--red); color:#fff; border-color:var(--red); animation:pulse 1.2s infinite;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(194,59,59,0.5);}
+    70%{box-shadow:0 0 0 10px rgba(194,59,59,0);}
+    100%{box-shadow:0 0 0 0 rgba(194,59,59,0);}
+  }
+  .msg.user-audio{background:var(--ink); align-self:flex-end; border-bottom-right-radius:4px; padding:10px 14px;}
+  .msg.user-audio audio{width:220px; height:36px;}
+  .msg.user-audio .transcript{color:#C9D3E4; font-size:0.78rem; margin-top:6px; font-style:italic;}
+  .checker-note{
+    font-size:0.78rem; color:var(--text-soft); text-align:center; padding:10px 20px 18px; max-width:720px; margin:0 auto;
+  }
+
+  /* ===== RECORDS ===== */
+  .records-wrap{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  .record-form, .record-list{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:24px; box-shadow:var(--shadow);
+  }
+  .record-form h3, .record-list h3{font-size:1.02rem; margin-bottom:16px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:0.8rem; font-weight:600; color:var(--text-soft); margin-bottom:6px;}
+  .field input, .field select, .field textarea{
+    width:100%; border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    font-family:inherit; font-size:0.9rem; background:var(--paper);
+  }
+  .field textarea{resize:vertical; min-height:70px;}
+  .record-card{
+    border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:12px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+  }
+  .record-card .rc-type{
+    font-family:'JetBrains Mono'; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--green); font-weight:600;
+  }
+  .record-card .rc-title{font-weight:600; margin:4px 0 2px; font-size:0.94rem;}
+  .record-card .rc-date{font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--text-soft);}
+  .record-card button{background:transparent; color:var(--red); font-size:0.9rem;}
+  #record-empty{color:var(--text-soft); font-size:0.88rem; text-align:center; padding:20px 0;}
+
+  /* ===== FIND CARE ===== */
+  .findcare-panel{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:24px;
+  }
+  .findcare-controls{display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;}
+  .findcare-controls select{
+    flex:1; min-width:180px; border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    font-family:inherit; background:var(--paper); font-size:0.9rem;
+  }
+  #facility-results{display:grid; grid-template-columns:repeat(2, 1fr); gap:14px;}
+  .facility-card{
+    border:1px solid var(--line); border-radius:12px; padding:16px; background:var(--paper);
+  }
+  .facility-card .fc-name{font-weight:600; margin-bottom:4px;}
+  .facility-card .fc-meta{font-size:0.8rem; color:var(--text-soft);}
+  .facility-badge{
+    display:inline-block; margin-top:8px; font-size:0.7rem; font-family:'JetBrains Mono';
+    background:#E7F1EC; color:var(--green); padding:3px 9px; border-radius:999px;
+  }
+
+  /* ===== MATERNAL & CHILD ===== */
+  .mc-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  .mc-card{
+    background:var(--ink); color:#fff; border-radius:var(--radius); padding:28px;
+  }
+  .mc-card h3{color:#fff; font-size:1.1rem; margin-bottom:10px;}
+  .mc-card p{color:#C9D3E4; font-size:0.9rem; margin-bottom:16px;}
+  .mc-card ul{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .mc-card li{font-size:0.85rem; color:#EAEFF7; display:flex; gap:8px;}
+  .mc-card li::before{content:'—'; color:var(--gold);}
+
+  /* ===== FOOTER ===== */
+  footer{background:var(--ink); color:#AEB9CC; padding:40px 0 24px; font-size:0.85rem;}
+  .footer-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; align-items:center;}
+  .footer-brand{color:#fff; font-family:'Sora'; font-weight:700;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:820px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero-art{order:-1; max-width:280px; margin:0 auto;}
+    .features-grid{grid-template-columns:1fr;}
+    .records-wrap{grid-template-columns:1fr;}
+    .mc-grid{grid-template-columns:1fr;}
+    #facility-results{grid-template-columns:1fr;}
+    .nav-links{
+      position:fixed; top:60px; left:0; right:0; background:var(--ink);
+      flex-direction:column; align-items:flex-start; padding:18px 24px; gap:16px;
+      display:none;
+    }
+    .nav-links.open{display:flex;}
+    .nav-toggle{display:block;}
+    .hero-stats{flex-wrap:wrap;}
+    .hero-stat{flex:1 1 50%; border-bottom:1px solid rgba(255,255,255,0.12);}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<div class="emergency-bar">
+  <span id="emergency-text">In a medical emergency, call your local emergency number now.</span>
+  <button id="emergency-btn" type="button">Emergency numbers</button>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none">
+        <path d="M4 22 Q16 8 28 22" stroke="#E8A33D" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="4" cy="24" r="3" fill="#2F6F4E"/>
+        <circle cx="28" cy="24" r="3" fill="#fff"/>
+      </svg>
+      <span>HealthBridge<span style="color:#E8A33D">AI</span></span>
+    </div>
+    <div class="nav-links" id="nav-links">
+      <a href="#checker" data-i18n="nav_checker">Symptom Guidance</a>
+      <a href="#findcare" data-i18n="nav_findcare">Find Care</a>
+      <a href="#records" data-i18n="nav_records">My Records</a>
+      <a href="#maternal" data-i18n="nav_maternal">Maternal &amp; Child</a>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="lang-switch" role="group" aria-label="Choose language">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ha">HA</button>
+        <button class="lang-btn" data-lang="yo">YO</button>
+        <button class="lang-btn" data-lang="ig">IG</button>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" style="padding-bottom:0;">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow" data-i18n="eyebrow">Built for Nigeria, in your language</div>
+        <h1 data-i18n="hero_title">Bridging People to <span>Healthcare</span></h1>
+        <p data-i18n="hero_sub">Check symptoms, find nearby doctors, keep your health records, and get maternal &amp; child health guidance — in English, Hausa, Yoruba or Igbo. Works on any phone.</p>
+        <div class="hero-ctas">
+          <a href="#checker" class="btn btn-primary" data-i18n="hero_cta1">Check my symptoms</a>
+          <a href="#findcare" class="btn btn-ghost" data-i18n="hero_cta2">Find a doctor</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <svg class="bridge-svg" viewBox="0 0 400 260" fill="none">
+          <path d="M20 190 Q200 40 380 190" stroke="#E8A33D" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <line x1="60" y1="190" x2="60" y2="150" stroke="#3A4A6B" stroke-width="4"/>
+          <line x1="110" y1="190" x2="110" y2="115" stroke="#3A4A6B" stroke-width="4"/>
+          <line x1="160" y1="190" x2="160" y2="90" stroke="#3A4A6B" stroke-width="4"/>
+          <line x1="240" y1="190" x2="240" y2="90" stroke="#3A4A6B" stroke-width="4"/>
+          <line x1="290" y1="190" x2="290" y2="115" stroke="#3A4A6B" stroke-width="4"/>
+          <line x1="340" y1="190" x2="340" y2="150" stroke="#3A4A6B" stroke-width="4"/>
+          <rect x="10" y="190" width="60" height="14" rx="4" fill="#2F6F4E"/>
+          <rect x="330" y="190" width="60" height="14" rx="4" fill="#fff"/>
+          <circle cx="35" cy="180" r="9" fill="#2F6F4E"/>
+          <circle cx="365" cy="180" r="9" fill="#fff" opacity="0.9"/>
+          <text x="14" y="230" fill="#AEB9CC" font-family="JetBrains Mono" font-size="11">YOU</text>
+          <text x="345" y="230" fill="#AEB9CC" font-family="JetBrains Mono" font-size="11">CARE</text>
+        </svg>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">4</div><div class="label" data-i18n="stat1">Languages supported</div></div>
+      <div class="hero-stat"><div class="num">36</div><div class="label" data-i18n="stat2">States covered</div></div>
+      <div class="hero-stat"><div class="num">24/7</div><div class="label" data-i18n="stat3">Guidance access</div></div>
+      <div class="hero-stat"><div class="num">0</div><div class="label" data-i18n="stat4">Naira to use</div></div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== FEATURES ===== -->
+  <section id="features">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">What HealthBridge does</div>
+        <h2 data-i18n="feat_head">Everything you need, in one place</h2>
+        <p data-i18n="feat_sub">Four tools built around how care actually happens in your community.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#FDF2E3;">🩺</div>
+          <h3 data-i18n="feat1_title">Symptom Guidance</h3>
+          <p data-i18n="feat1_body">Describe how you feel in your own language and get clear next-step guidance — not a diagnosis, a direction.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#E7F1EC;">📍</div>
+          <h3 data-i18n="feat2_title">Find Nearby Care</h3>
+          <p data-i18n="feat2_body">Search clinics, hospitals and pharmacies by state and LGA, even on a low-data connection.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background:#EAF0FA;">📁</div>
+          <h3 data-i18n="feat3_title">Personal Health Records</h3>
+          <p data-i18n="feat3_body">Log symptoms, medicines and vitals over time, and show them to a health worker when you visit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== SYMPTOM CHECKER ===== -->
+  <section id="checker">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Symptom guidance</div>
+        <h2 data-i18n="checker_head">Tell us how you're feeling</h2>
+        <p data-i18n="checker_sub">This gives general guidance only. It never replaces a visit to a qualified health worker.</p>
+      </div>
+      <div class="checker-panel">
+        <div class="checker-head">
+          <span class="dot"></span>
+          <strong data-i18n="checker_bot_name">HealthBridge Guide</strong>
+          <span data-i18n="checker_status">Online</span>
+        </div>
+        <div id="chat-log"></div>
+        <div class="checker-input">
+          <input type="text" id="chat-input" data-i18n-placeholder="checker_placeholder" placeholder="Type your symptom, e.g. fever and headache...">
+          <button id="chat-mic" type="button" aria-label="Record voice note">🎤</button>
+          <button id="chat-send" aria-label="Send">➤</button>
+        </div>
+      </div>
+      <p class="checker-note" data-i18n="checker_note">If you have severe bleeding, chest pain, difficulty breathing, or loss of consciousness, go to the nearest emergency room immediately.</p>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== FIND CARE ===== -->
+  <section id="findcare">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Find care near you</div>
+        <h2 data-i18n="findcare_head">Search by state and LGA</h2>
+        <p data-i18n="findcare_sub">A starting directory of facilities — more are added as HealthBridge grows.</p>
+      </div>
+      <div class="findcare-panel">
+        <div class="findcare-controls">
+          <select id="state-select"></select>
+          <select id="lga-select"></select>
+          <button class="btn btn-green" id="search-facilities" data-i18n="findcare_btn">Search</button>
+        </div>
+        <div id="facility-results"></div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== PERSONAL HEALTH RECORDS ===== -->
+  <section id="records">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Your health, tracked</div>
+        <h2 data-i18n="records_head">Personal Health Records</h2>
+        <p data-i18n="records_sub">Keep a simple record of symptoms, medicines and vitals to share with a doctor.</p>
+      </div>
+      <div class="records-wrap">
+        <div class="record-form">
+          <h3 data-i18n="records_form_title">Add a record</h3>
+          <div class="field">
+            <label data-i18n="records_type_label">Type</label>
+            <select id="record-type">
+              <option value="symptom" data-i18n="records_type_symptom">Symptom</option>
+              <option value="medicine" data-i18n="records_type_medicine">Medicine</option>
+              <option value="vital" data-i18n="records_type_vital">Vital reading</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="records_title_label">Title</label>
+            <input type="text" id="record-title" placeholder="e.g. Headache, Paracetamol, Blood pressure">
+          </div>
+          <div class="field">
+            <label data-i18n="records_notes_label">Notes</label>
+            <textarea id="record-notes" placeholder="Any extra detail..."></textarea>
+          </div>
+          <button class="btn btn-primary" id="record-add" data-i18n="records_add_btn">Save record</button>
+        </div>
+        <div class="record-list">
+          <h3 data-i18n="records_list_title">Your records</h3>
+          <div id="record-items"></div>
+          <div id="record-empty" data-i18n="records_empty">No records yet. Add your first one.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="bridge-divider" viewBox="0 0 1100 34" preserveAspectRatio="none"><path d="M0 30 Q275 4 550 30 T1100 30"/></svg>
+
+  <!-- ===== MATERNAL & CHILD ===== -->
+  <section id="maternal">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow">Maternal &amp; child health</div>
+        <h2 data-i18n="mc_head">Guidance for mothers and children</h2>
+      </div>
+      <div class="mc-grid">
+        <div class="mc-card">
+          <h3 data-i18n="mc1_title">During pregnancy</h3>
+          <p data-i18n="mc1_sub">Simple guidance for each stage, and warning signs that need urgent care.</p>
+          <ul>
+            <li data-i18n="mc1_li1">Antenatal visit reminders</li>
+            <li data-i18n="mc1_li2">Warning signs to watch for</li>
+            <li data-i18n="mc1_li3">Nutrition guidance by trimester</li>
+          </ul>
+        </div>
+        <div class="mc-card">
+          <h3 data-i18n="mc2_title">Child health</h3>
+          <p data-i18n="mc2_sub">Track growth milestones and common childhood illnesses.</p>
+          <ul>
+            <li data-i18n="mc2_li1">Immunization schedule</li>
+            <li data-i18n="mc2_li2">Growth &amp; feeding milestones</li>
+            <li data-i18n="mc2_li3">Common illness guidance</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">HealthBridge AI</div>
+    <div data-i18n="footer_text">Not a substitute for professional medical care. Always consult a qualified health worker.</div>
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// HEALTHBRIDGE AI — PART 2 (JavaScript)
+// Paste this entire block into Part 1, right after the
+// <script> tag where it says "PART 2 GOES HERE", then save
+// the combined file as healthbridge.html
+// ============================================================
+
+// ---------- 1. TRANSLATIONS ----------
+const translations = {
+  en: {
+    nav_checker: "Symptom Guidance", nav_findcare: "Find Care", nav_records: "My Records", nav_maternal: "Maternal & Child",
+    eyebrow: "Built for Nigeria, in your language",
+    hero_title: "Bridging People to <span>Healthcare</span>",
+    hero_sub: "Check symptoms, find nearby doctors, keep your health records, and get maternal & child health guidance — in English, Hausa, Yoruba or Igbo. Works on any phone.",
+    hero_cta1: "Check my symptoms", hero_cta2: "Find a doctor",
+    stat1: "Languages supported", stat2: "States covered", stat3: "Guidance access", stat4: "Naira to use",
+    feat_head: "Everything you need, in one place", feat_sub: "Four tools built around how care actually happens in your community.",
+    feat1_title: "Symptom Guidance", feat1_body: "Describe how you feel in your own language and get clear next-step guidance — not a diagnosis, a direction.",
+    feat2_title: "Find Nearby Care", feat2_body: "Search clinics, hospitals and pharmacies by state and LGA, even on a low-data connection.",
+    feat3_title: "Personal Health Records", feat3_body: "Log symptoms, medicines and vitals over time, and show them to a health worker when you visit.",
+    checker_head: "Tell us how you're feeling", checker_sub: "This gives general guidance only. It never replaces a visit to a qualified health worker.",
+    checker_bot_name: "HealthBridge Guide", checker_status: "Online", checker_placeholder: "Type your symptom, e.g. fever and headache...",
+    checker_note: "If you have severe bleeding, chest pain, difficulty breathing, or loss of consciousness, go to the nearest emergency room immediately.",
+    checker_greeting: "Hello! Tell me what symptoms you're experiencing and I'll share some general guidance.",
+    findcare_head: "Search by state and LGA", findcare_sub: "A starting directory of facilities — more are added as HealthBridge grows.",
+    findcare_btn: "Search", findcare_locate: "Use my location", findcare_locating: "Finding your location...",
+    findcare_all_states: "All states", findcare_all_lgas: "All LGAs", findcare_no_results: "No facilities found for that area yet.",
+    findcare_start: "Choose a state and press Search, or use your location.",
+    records_head: "Personal Health Records", records_sub: "Keep a simple record of symptoms, medicines and vitals to share with a doctor.",
+    records_form_title: "Add a record", records_type_label: "Type", records_type_symptom: "Symptom", records_type_medicine: "Medicine",
+    records_type_vital: "Vital reading", records_title_label: "Title", records_notes_label: "Notes", records_add_btn: "Save record",
+    records_list_title: "Your records", records_empty: "No records yet. Add your first one.",
+    mc_head: "Guidance for mothers and children",
+    mc1_title: "During pregnancy", mc1_sub: "Simple guidance for each stage, and warning signs that need urgent care.",
+    mc1_li1: "Antenatal visit reminders", mc1_li2: "Warning signs to watch for", mc1_li3: "Nutrition guidance by trimester",
+    mc2_title: "Child health", mc2_sub: "Track growth milestones and common childhood illnesses.",
+    mc2_li1: "Immunization schedule", mc2_li2: "Growth & feeding milestones", mc2_li3: "Common illness guidance",
+    footer_text: "Not a substitute for professional medical care. Always consult a qualified health worker.",
+    emergency_text: "In a medical emergency, call your local emergency number now.", emergency_btn: "Emergency numbers",
+    emergency_title: "Emergency numbers (Nigeria)",
+    record_placeholder_title: "e.g. Headache, Paracetamol, Blood pressure"
+  },
+  ha: {
+    nav_checker: "Jagoran Alamun Rashin Lafiya", nav_findcare: "Nemo Kiwon Lafiya", nav_records: "Bayanaina", nav_maternal: "Uwa da Yara",
+    eyebrow: "An gina domin Najeriya, cikin harshenka",
+    hero_title: "Haɗa Mutane da <span>Kiwon Lafiya</span>",
+    hero_sub: "Bincika alamun rashin lafiya, nemo likitoci kusa da kai, ajiye bayanan lafiyarka, kuma sami jagora kan lafiyar uwa da yara — cikin Turanci, Hausa, Yoruba ko Igbo. Yana aiki a kowane wayar hannu.",
+    hero_cta1: "Duba alamuna", hero_cta2: "Nemo likita",
+    stat1: "Harsuna da ake amfani", stat2: "Jihohi da aka rufe", stat3: "Samun jagora", stat4: "Naira don amfani",
+    feat_head: "Duk abin da kake bukata, a wuri guda", feat_sub: "Kayan aiki hudu da aka gina bisa yadda kula lafiya ke faruwa a unguwarka.",
+    feat1_title: "Jagoran Alamun Rashin Lafiya", feat1_body: "Bayyana yadda kake ji cikin harshenka domin samun jagora — ba ganewar asali ba, sai kwatance.",
+    feat2_title: "Nemo Kiwon Lafiya Kusa", feat2_body: "Bincika asibiti, dakin magani da kantin magani ta jiha da kananan hukumomi, ko da yanar gizo yana da rauni.",
+    feat3_title: "Bayanan Lafiyarka", feat3_body: "Rubuta alamun rashin lafiya, magunguna da ma'aunan lafiya, ka nuna wa ma'aikacin lafiya idan ka ziyarce shi.",
+    checker_head: "Gaya mana yadda kake ji", checker_sub: "Wannan jagora ne kawai. Ba ya maye gurbin ziyarar ma'aikacin lafiya.",
+    checker_bot_name: "Jagoran HealthBridge", checker_status: "Yana kan layi", checker_placeholder: "Rubuta alamarka, misali zazzabi da ciwon kai...",
+    checker_note: "Idan kana da zubar jini mai yawa, ciwon kirji, wahalar numfashi, ko rashin sani, je asibiti mafi kusa nan take.",
+    checker_greeting: "Sannu! Gaya mani alamun da kake ji domin in baka jagora.",
+    findcare_head: "Bincika ta jiha da kananan hukumomi", findcare_sub: "Jerin farko na asibitoci — ana kara ƙarawa yayin da HealthBridge ke girma.",
+    findcare_btn: "Bincika", findcare_locate: "Yi amfani da wurina", findcare_locating: "Ana neman wurinka...",
+    findcare_all_states: "Dukkan jihohi", findcare_all_lgas: "Dukkan kananan hukumomi", findcare_no_results: "Ba a sami asibiti a wannan yanki ba tukuna.",
+    findcare_start: "Zaɓi jiha sannan ka danna Bincika, ko amfani da wurinka.",
+    records_head: "Bayanan Lafiyarka", records_sub: "Rike bayanan alamun rashin lafiya, magunguna da ma'aunai domin nuna wa likita.",
+    records_form_title: "Ƙara bayani", records_type_label: "Nau'i", records_type_symptom: "Alamar rashin lafiya", records_type_medicine: "Magani",
+    records_type_vital: "Ma'aunin lafiya", records_title_label: "Take", records_notes_label: "Ƙarin bayani", records_add_btn: "Ajiye",
+    records_list_title: "Bayananka", records_empty: "Babu bayani tukuna. Ƙara na farko.",
+    mc_head: "Jagora domin uwaye da yara",
+    mc1_title: "Lokacin ciki", mc1_sub: "Sauƙin jagora domin kowane mataki, da alamun gargaɗi da ke buƙatar kulawa cikin gaggawa.",
+    mc1_li1: "Tunatarwa domin ziyarar likita", mc1_li2: "Alamun gargaɗi da za a kula da su", mc1_li3: "Jagoran abinci mai gina jiki bisa watanni",
+    mc2_title: "Lafiyar Yara", mc2_sub: "Bibiyar girma da cututtukan yara na kowa.",
+    mc2_li1: "Jadawalin allurar rigakafi", mc2_li2: "Ci gaban girma da ciyarwa", mc2_li3: "Jagora kan cututtukan yara",
+    footer_text: "Ba maye gurbin kulawar likita ba ne. Ka tuntuɓi ma'aikacin lafiya koyaushe.",
+    emergency_text: "Idan akwai gaggawar lafiya, kira lambar gaggawa ta yankinka yanzu.", emergency_btn: "Lambobin gaggawa",
+    emergency_title: "Lambobin gaggawa (Najeriya)",
+    record_placeholder_title: "misali Ciwon kai, Paracetamol, Hawan jini"
+  },
+  yo: {
+    nav_checker: "Itọsọna Àpẹẹrẹ Àìsàn", nav_findcare: "Wa Ìtọ́jú", nav_records: "Àkọsílẹ̀ Mi", nav_maternal: "Ìyá àti Ọmọ",
+    eyebrow: "A kọ́ fún Nàìjíríà, ní èdè rẹ",
+    hero_title: "Ìsopọ̀ Ènìyàn sí <span>Ìlera</span>",
+    hero_sub: "Ṣàyẹ̀wò àpẹẹrẹ àìsàn, wa dókítà tó wà nítòsí, tọ́jú àkọsílẹ̀ ìlera rẹ, kí o sì gba ìtọ́ni lórí ìlera ìyá àti ọmọ — ní Gẹ̀ẹ́sì, Hausa, Yorùbá tàbí Igbo. Ó ń ṣiṣẹ́ lórí fóònù kankan.",
+    hero_cta1: "Ṣàyẹ̀wò àpẹẹrẹ mi", hero_cta2: "Wa dókítà",
+    stat1: "Èdè tí ó wà", stat2: "Ìpínlẹ̀ tí ó bò", stat3: "Ìtọ́sọ́nà nígbàkúùgbà", stat4: "Náírà láti lò",
+    feat_head: "Ohun gbogbo tí o nílò, ní ibi kan", feat_sub: "Irinṣẹ́ mẹ́rin tí a kọ́ gẹ́gẹ́ bí ìtọ́jú ìlera ṣe ń ṣẹlẹ̀ ní àdúgbò rẹ.",
+    feat1_title: "Itọsọna Àpẹẹrẹ Àìsàn", feat1_body: "Ṣàpèjúwe bí ara rẹ ṣe rí ní èdè rẹ láti gba ìtọ́sọ́nà tó ṣe kedere — kì í ṣe àyẹ̀wò dókítà, ṣùgbọ́n ìtọ́ni.",
+    feat2_title: "Wa Ìtọ́jú Nítòsí", feat2_body: "Ṣàyẹ̀wò ilé ìwòsàn àti ilé ìtajà oògùn nípasẹ̀ ìpínlẹ̀ àti LGA, kódà lórí ẹ̀rọ alátagbà kékeré.",
+    feat3_title: "Àkọsílẹ̀ Ìlera Rẹ", feat3_body: "Kọ àpẹẹrẹ àìsàn, oògùn àti ìdiwọn ìlera sílẹ̀, kí o sì fi hàn sí òṣìṣẹ́ ìlera nígbà tí o bá lọ síbẹ̀.",
+    checker_head: "Sọ fún wa bí ara rẹ ṣe rí", checker_sub: "Èyí jẹ́ ìtọ́sọ́nà gbogbogbò nìkan. Kò rọ́pò lílọ sí ọ̀dọ̀ òṣìṣẹ́ ìlera tó gbẹ́kẹ̀lé.",
+    checker_bot_name: "Atọ́nà HealthBridge", checker_status: "Ó wà lórí ayélujára", checker_placeholder: "Kọ àpẹẹrẹ àìsàn rẹ, bí ìba àti orí fífọ́...",
+    checker_note: "Bí ẹ̀jẹ̀ bá ń jáde lọ́pọ̀lọpọ̀, tí àyà ń dun ọ, tí ìmí ń le, tàbí tí o dá lásán, lọ sí ilé ìwòsàn tó sún mọ́ ọ lẹ́sẹ̀kẹsẹ̀.",
+    checker_greeting: "Ẹ nlẹ́! Sọ àpẹẹrẹ àìsàn tí o ní fún mi kí n lè fún ọ ní ìtọ́sọ́nà gbogbogbò.",
+    findcare_head: "Wá nípasẹ̀ ìpínlẹ̀ àti LGA", findcare_sub: "Àtòjọ ilé ìwòsàn àkọ́kọ́ — a ń fi kún un bí HealthBridge ṣe ń dàgbà.",
+    findcare_btn: "Wá", findcare_locate: "Lo ipò mi", findcare_locating: "Ń wá ipò rẹ...",
+    findcare_all_states: "Gbogbo ìpínlẹ̀", findcare_all_lgas: "Gbogbo LGA", findcare_no_results: "Kò sí ilé ìwòsàn tí a rí ní agbègbè yẹn síbẹ̀.",
+    findcare_start: "Yan ìpínlẹ̀ kí o sì tẹ Wá, tàbí lo ipò rẹ.",
+    records_head: "Àkọsílẹ̀ Ìlera Rẹ", records_sub: "Tọ́jú àkọsílẹ̀ àpẹẹrẹ àìsàn, oògùn àti ìdiwọn ìlera láti fi hàn sí dókítà.",
+    records_form_title: "Fi àkọsílẹ̀ kún", records_type_label: "Irú", records_type_symptom: "Àpẹẹrẹ àìsàn", records_type_medicine: "Oògùn",
+    records_type_vital: "Ìdiwọn ìlera", records_title_label: "Àkọlé", records_notes_label: "Àlàyé kún", records_add_btn: "Fi pamọ́",
+    records_list_title: "Àkọsílẹ̀ rẹ", records_empty: "Kò sí àkọsílẹ̀ síbẹ̀. Fi èyí àkọ́kọ́ kún.",
+    mc_head: "Ìtọ́sọ́nà fún àwọn ìyá àti ọmọ",
+    mc1_title: "Nígbà oyún", mc1_sub: "Ìtọ́sọ́nà rọrùn fún ìpele kọ̀ọ̀kan, àti àmì ìkìlọ̀ tí ó nílò ìtọ́jú kánjú.",
+    mc1_li1: "Ìránnilétí ìbẹ̀wò ṣáájú ìbímọ", mc1_li2: "Àmì ìkìlọ̀ láti kíyèsí", mc1_li3: "Ìtọ́sọ́nà oúnjẹ fún oṣù kọ̀ọ̀kan",
+    mc2_title: "Ìlera Ọmọ", mc2_sub: "Tọpa ìdàgbàsókè àti àìsàn tí ó wọ́pọ̀ láàrin àwọn ọmọdé.",
+    mc2_li1: "Àtòjọ abẹ́rẹ́ àjẹsára", mc2_li2: "Ìdàgbàsókè àti bí a ṣe ń bọ́ ọmọ", mc2_li3: "Ìtọ́sọ́nà àìsàn tó wọ́pọ̀",
+    footer_text: "Kì í ṣe àropò fún ìtọ́jú dókítà. Máa lọ sí ọ̀dọ̀ òṣìṣẹ́ ìlera nígbà gbogbo.",
+    emergency_text: "Bí pàjáwìrì ìlera bá wà, pe nọ́mbà pàjáwìrì agbègbè rẹ nísinsìnyí.", emergency_btn: "Nọ́mbà pàjáwìrì",
+    emergency_title: "Nọ́mbà pàjáwìrì (Nàìjíríà)",
+    record_placeholder_title: "bí Orí fífọ́, Paracetamol, Ìdiwọn ẹ̀jẹ̀"
+  },
+  ig: {
+    nav_checker: "Nduzi Mgbaàmà Ọrịa", nav_findcare: "Chọta Ọgwụgwọ", nav_records: "Ndekọ M", nav_maternal: "Nne na Nwa",
+    eyebrow: "Emere maka Naịjirịa, n'asụsụ gị",
+    hero_title: "Ijikọta Ndị Mmadụ na <span>Ahụike</span>",
+    hero_sub: "Nyochaa mgbaàmà ọrịa, chọta dọkịta dị nso, debe ndekọ ahụike gị, ma nweta nduzi ahụike nne na nwa — n'asụsụ Bekee, Hausa, Yoruba ma ọ bụ Igbo. Ọ na-arụ ọrụ na ekwentị ọ bụla.",
+    hero_cta1: "Nyochaa mgbaàmà m", hero_cta2: "Chọta dọkịta",
+    stat1: "Asụsụ dị", stat2: "Steeti e kpuchiri", stat3: "Nnweta nduzi", stat4: "Naira iji jiri ya",
+    feat_head: "Ihe niile ị chọrọ, n'otu ebe", feat_sub: "Ngwaọrụ anọ e mere dabere na otú nlekọta ahụike si eme n'obodo gị.",
+    feat1_title: "Nduzi Mgbaàmà Ọrịa", feat1_body: "Kọwaa otú ahụ dị gị n'asụsụ gị iji nweta nduzi doro anya — ọ bụghị nchọpụta ọrịa, kama ntụziaka.",
+    feat2_title: "Chọta Nlekọta Dị Nso", feat2_body: "Chọọ ụlọ ọgwụ na ụlọ ahịa ọgwụ site na steeti na LGA, ọbụna na netwọk dị ala.",
+    feat3_title: "Ndekọ Ahụike Onwe", feat3_body: "Dekọọ mgbaàmà ọrịa, ọgwụ na ihe atụ ahụike n'ime oge, gosi ha onye ọrụ ahụike mgbe ị ga-eleta ya.",
+    checker_head: "Gwa anyị otú ahụ dị gị", checker_sub: "Nke a na-enye naanị nduzi izugbe. Ọ dịghị anọchi anya ileta onye ọrụ ahụike ruru eru.",
+    checker_bot_name: "Onye Nduzi HealthBridge", checker_status: "Ọ nọ n'ịntanetị", checker_placeholder: "Dee mgbaàmà ọrịa gị, dịka ahụ ọkụ na isi ọwụwa...",
+    checker_note: "Ọ bụrụ na ị na-agba ọbara nke ukwuu, obi na-egbu gị mgbu, ike ọ na-agwụ gị iku ume, ma ọ bụ ị dara ada, gaa ụlọ ọgwụ mberede kacha nso ozugbo.",
+    checker_greeting: "Ndewo! Gwa m mgbaàmà ọrịa ị nwere ka m nyere gị nduzi izugbe.",
+    findcare_head: "Chọọ site na steeti na LGA", findcare_sub: "Ndepụta mmalite nke ụlọ ọgwụ — a na-agbakwunye ka HealthBridge na-eto.",
+    findcare_btn: "Chọọ", findcare_locate: "Jiri ebe m nọ", findcare_locating: "Na-achọ ebe ị nọ...",
+    findcare_all_states: "Steeti niile", findcare_all_lgas: "LGA niile", findcare_no_results: "Ahụtụbeghị ụlọ ọgwụ na mpaghara ahụ.",
+    findcare_start: "Họrọ steeti wee pịa Chọọ, ma ọ bụ jiri ebe ị nọ.",
+    records_head: "Ndekọ Ahụike Onwe", records_sub: "Debe ndekọ mfe nke mgbaàmà ọrịa, ọgwụ na ihe atụ ahụike iji gosi dọkịta.",
+    records_form_title: "Tinye ndekọ", records_type_label: "Ụdị", records_type_symptom: "Mgbaàmà ọrịa", records_type_medicine: "Ọgwụ",
+    records_type_vital: "Ihe atụ ahụike", records_title_label: "Isiokwu", records_notes_label: "Nkọwa ọzọ", records_add_btn: "Chekwaa",
+    records_list_title: "Ndekọ gị", records_empty: "Enweghị ndekọ ugbu a. Tinye nke mbụ gị.",
+    mc_head: "Nduzi maka ndị nne na ụmụaka",
+    mc1_title: "N'oge ime", mc1_sub: "Nduzi mfe maka usoro ọ bụla, na ihe ịrịba ama nke chọrọ nlekọta ngwa ngwa.",
+    mc1_li1: "Ncheta nleta tupu ọmụmụ", mc1_li2: "Ihe ịrịba ama ị ga-elerịba anya", mc1_li3: "Nduzi nri dịka ọnwa ime si dị",
+    mc2_title: "Ahụike Nwa", mc2_sub: "Soro uto na ọrịa ụmụaka a na-ahụkarị.",
+    mc2_li1: "Usoro agba mgbochi ọrịa", mc2_li2: "Uto na inye nri nwa", mc2_li3: "Nduzi ọrịa a na-ahụkarị",
+    footer_text: "Ọ bụghị ihe nnọchi nlekọta dọkịta ọkachamara. Na-ajụta onye ọrụ ahụike mgbe niile.",
+    emergency_text: "Ọ bụrụ na ọ bụ ihe mberede ahụike, kpọọ nọmba mberede mpaghara gị ugbu a.", emergency_btn: "Nọmba mberede",
+    emergency_title: "Nọmba mberede (Naịjirịa)",
+    record_placeholder_title: "dịka Isi ọwụwa, Paracetamol, Ọgụgụ ọbara"
+  }
+};
+
+let currentLang = "en";
+
+function applyTranslations(lang){
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  const dict = translations[lang];
+  document.querySelectorAll("[data-i18n]").forEach(function(el){
+    const key = el.getAttribute("data-i18n");
+    if(!dict[key]) return;
+    if(key === "hero_title"){
+      el.innerHTML = dict[key];
+    } else {
+      el.textContent = dict[key];
+    }
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el){
+    const key = el.getAttribute("data-i18n-placeholder");
+    if(dict[key]) el.setAttribute("placeholder", dict[key]);
+  });
+  const emergencyText = document.getElementById("emergency-text");
+  if(emergencyText) emergencyText.textContent = dict.emergency_text;
+  const emergencyBtn = document.getElementById("emergency-btn");
+  if(emergencyBtn) emergencyBtn.textContent = dict.emergency_btn;
+
+  document.querySelectorAll(".lang-btn").forEach(function(btn){
+    btn.classList.toggle("active", btn.getAttribute("data-lang") === lang);
+  });
+
+  renderRecords();
+  renderFacilityPrompt();
+  if(chatLog.children.length === 0){
+    addMessage("bot", dict.checker_greeting);
+  }
+}
+
+document.querySelectorAll(".lang-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    applyTranslations(btn.getAttribute("data-lang"));
+  });
+});
+
+// ---------- 2. NAV TOGGLE ----------
+const navToggle = document.getElementById("nav-toggle");
+const navLinks = document.getElementById("nav-links");
+navToggle.addEventListener("click", function(){
+  navLinks.classList.toggle("open");
+});
+document.querySelectorAll(".nav-links a").forEach(function(a){
+  a.addEventListener("click", function(){ navLinks.classList.remove("open"); });
+});
+
+// ---------- 3. EMERGENCY NUMBERS ----------
+document.getElementById("emergency-btn").addEventListener("click", function(){
+  const dict = translations[currentLang];
+  alert(
+    dict.emergency_title + "\n\n" +
+    "National Emergency Number: 112\n" +
+    "Nigeria Police: 112 / 199\n" +
+    "Federal Fire Service: 112\n" +
+    "NCDC Emergency Line: 6232\n\n" +
+    "If you cannot reach these, go directly to the nearest hospital or clinic."
+  );
+});
+
+// ---------- 4. SYMPTOM CHECKER ----------
+const chatLog = document.getElementById("chat-log");
+const chatInput = document.getElementById("chat-input");
+const chatSend = document.getElementById("chat-send");
+
+function addMessage(role, text){
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.textContent = text;
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+const RED_FLAGS = [
+  "chest pain", "can't breathe", "cannot breathe", "difficulty breathing",
+  "unconscious", "not breathing", "heavy bleeding", "severe bleeding",
+  "convulsion", "seizure", "ciwon kirji", "numfashi", "àyà", "ìmí", "obi na-egbu", "iku ume"
+];
+
+const SYMPTOM_RESPONSES = [
+  { keys: ["fever", "zazzabi", "ìba", "ahụ ọkụ", "temperature"],
+    text: "A fever can have many causes, including malaria, which is common in Nigeria. Rest, drink plenty of fluids, and consider a malaria test at a nearby clinic if it continues beyond a day or is very high." },
+  { keys: ["headache", "ciwon kai", "orí fífọ́", "isi ọwụwa"],
+    text: "Headaches are often linked to dehydration, stress, or fever. Rest in a cool, quiet place and drink water. See a health worker if it is severe, sudden, or comes with vision changes." },
+  { keys: ["cough", "tari", "ikọ", "ụkwara"],
+    text: "A cough that lasts more than two weeks, or comes with fever and chest pain, should be checked by a health worker to rule out infections such as TB or pneumonia." },
+  { keys: ["diarrhea", "diarrhoea", "gudawa", "ìgbẹ́gbuuru", "afọ ọsịsọ"],
+    text: "Keep drinking fluids to avoid dehydration — oral rehydration salts help if available. See a clinic if it lasts more than two days, or if there is blood or high fever." },
+  { keys: ["pregnant", "pregnancy", "ciki", "oyún", "ime"],
+    text: "During pregnancy, mild nausea and tiredness are common. Keep up antenatal visits, eat small frequent meals, and go to a clinic immediately for heavy bleeding, severe pain, or blurred vision." },
+  { keys: ["malaria"],
+    text: "Fever, chills, and body aches can point to malaria, which is common in Nigeria. A rapid test at the nearest clinic can confirm this — please don't self-medicate without one." }
+];
+
+function generateResponse(rawText){
+  const text = rawText.toLowerCase();
+  for(const flag of RED_FLAGS){
+    if(text.indexOf(flag.toLowerCase()) !== -1){
+      return { flag: true, text: "This could be serious. Please go to the nearest emergency room or call 112 right now — do not wait." };
+    }
+  }
+  for(const item of SYMPTOM_RESPONSES){
+    for(const key of item.keys){
+      if(text.indexOf(key.toLowerCase()) !== -1){
+        return { flag: false, text: item.text };
+      }
+    }
+  }
+  return { flag: false, text: "Thanks for sharing that. It's best to have a health worker examine you for a clear picture — you can search 'Find Care' above for a clinic near you. If things get worse quickly, seek care immediately." };
+}
+
+function sendChat(){
+  const val = chatInput.value.trim();
+  if(!val) return;
+  addMessage("user", val);
+  chatInput.value = "";
+  setTimeout(function(){
+    const res = generateResponse(val);
+    addMessage(res.flag ? "flag" : "bot", res.text);
+  }, 350);
+}
+
+chatSend.addEventListener("click", sendChat);
+chatInput.addEventListener("keydown", function(e){
+  if(e.key === "Enter") sendChat();
+});
+
+// ---------- 4b. VOICE NOTE RECORDING ----------
+const chatMic = document.getElementById("chat-mic");
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+let speechRecognizer = null;
+let liveTranscript = "";
+
+function addAudioMessage(audioUrl, transcript){
+  const div = document.createElement("div");
+  div.className = "msg user-audio";
+  const audio = document.createElement("audio");
+  audio.controls = true;
+  audio.src = audioUrl;
+  div.appendChild(audio);
+  if(transcript){
+    const t = document.createElement("div");
+    t.className = "transcript";
+    t.textContent = "\"" + transcript + "\"";
+    div.appendChild(t);
+  }
+  chatLog.appendChild(div);
+  chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+function startRecording(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert("Voice recording is not supported on this device/browser.");
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function(stream){
+      audioChunks = [];
+      liveTranscript = "";
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.addEventListener("dataavailable", function(e){
+        audioChunks.push(e.data);
+      });
+
+      mediaRecorder.addEventListener("stop", function(){
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        addAudioMessage(audioUrl, liveTranscript.trim());
+        stream.getTracks().forEach(function(track){ track.stop(); });
+
+        setTimeout(function(){
+          if(liveTranscript.trim()){
+            const res = generateResponse(liveTranscript);
+            addMessage(res.flag ? "flag" : "bot", res.text);
+          } else {
+            addMessage("bot", "Voice note received. For the clearest guidance, please also type your symptom in the box above.");
+          }
+        }, 350);
+      });
+
+      mediaRecorder.start();
+      isRecording = true;
+      chatMic.classList.add("recording");
+      chatMic.textContent = "■";
+
+      // Optional live transcription where the browser supports it
+      const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(SpeechRecognitionAPI){
+        speechRecognizer = new SpeechRecognitionAPI();
+        speechRecognizer.continuous = true;
+        speechRecognizer.interimResults = false;
+        speechRecognizer.lang = currentLang === "en" ? "en-NG" : currentLang;
+        speechRecognizer.addEventListener("result", function(event){
+          for(let i = event.resultIndex; i < event.results.length; i++){
+            if(event.results[i].isFinal){
+              liveTranscript += " " + event.results[i][0].transcript;
+            }
+          }
+        });
+        speechRecognizer.addEventListener("error", function(){ /* transcription unavailable, audio note still works */ });
+        try { speechRecognizer.start(); } catch(e) { /* ignore */ }
+      }
+    })
+    .catch(function(){
+      alert("Microphone permission was denied. You can still type your symptom above.");
+    });
+}
+
+function stopRecording(){
+  if(mediaRecorder && isRecording){
+    mediaRecorder.stop();
+  }
+  if(speechRecognizer){
+    try { speechRecognizer.stop(); } catch(e) { /* ignore */ }
+  }
+  isRecording = false;
+  chatMic.classList.remove("recording");
+  chatMic.textContent = "🎤";
+}
+
+chatMic.addEventListener("click", function(){
+  if(isRecording){
+    stopRecording();
+  } else {
+    startRecording();
+  }
+});
+
+// ---------- 5. FIND CARE DATA + GEOLOCATION ----------
+const FACILITIES = [
+  { name: "Abia State Specialist Hospital", type: "Hospital", state: "Abia", lga: "Umuahia", lat: 5.5265, lng: 7.4864 },
+  { name: "Federal Medical Centre Yola", type: "Hospital", state: "Adamawa", lga: "Yola", lat: 9.2035, lng: 12.4954 },
+  { name: "University of Uyo Teaching Hospital", type: "Hospital", state: "Akwa Ibom", lga: "Uyo", lat: 5.0377, lng: 7.9128 },
+  { name: "Chukwuemeka Odumegwu Ojukwu Teaching Hospital", type: "Hospital", state: "Anambra", lga: "Awka", lat: 6.212, lng: 7.074 },
+  { name: "Abubakar Tafawa Balewa Teaching Hospital", type: "Hospital", state: "Bauchi", lga: "Bauchi", lat: 10.3103, lng: 9.8439 },
+  { name: "Federal Medical Centre Yenagoa", type: "Hospital", state: "Bayelsa", lga: "Yenagoa", lat: 4.9267, lng: 6.2676 },
+  { name: "Benue State University Teaching Hospital", type: "Hospital", state: "Benue", lga: "Makurdi", lat: 7.7322, lng: 8.5391 },
+  { name: "University of Maiduguri Teaching Hospital", type: "Hospital", state: "Borno", lga: "Maiduguri", lat: 11.8333, lng: 13.15 },
+  { name: "University of Calabar Teaching Hospital", type: "Hospital", state: "Cross River", lga: "Calabar", lat: 4.9589, lng: 8.3269 },
+  { name: "Federal Medical Centre Asaba", type: "Hospital", state: "Delta", lga: "Asaba", lat: 6.1987, lng: 6.698 },
+  { name: "Alex Ekwueme Federal University Teaching Hospital", type: "Hospital", state: "Ebonyi", lga: "Abakaliki", lat: 6.3249, lng: 8.1137 },
+  { name: "University of Benin Teaching Hospital", type: "Hospital", state: "Edo", lga: "Benin City", lat: 6.335, lng: 5.6037 },
+  { name: "Ekiti State University Teaching Hospital", type: "Hospital", state: "Ekiti", lga: "Ado-Ekiti", lat: 7.621, lng: 5.2213 },
+  { name: "Enugu State University Teaching Hospital", type: "Hospital", state: "Enugu", lga: "Enugu East", lat: 6.4413, lng: 7.5086 },
+  { name: "Federal Teaching Hospital Gombe", type: "Hospital", state: "Gombe", lga: "Gombe", lat: 10.2897, lng: 11.1673 },
+  { name: "Federal Medical Centre Owerri", type: "Hospital", state: "Imo", lga: "Owerri", lat: 5.484, lng: 7.0351 },
+  { name: "Sheikh Muhammadu Sanusi II Specialist Hospital", type: "Hospital", state: "Jigawa", lga: "Dutse", lat: 11.7566, lng: 9.3387 },
+  { name: "Barau Dikko Teaching Hospital", type: "Hospital", state: "Kaduna", lga: "Kaduna North", lat: 10.534, lng: 7.439 },
+  { name: "Murtala Muhammad Specialist Hospital", type: "Hospital", state: "Kano", lga: "Kano Municipal", lat: 12.0022, lng: 8.5919 },
+  { name: "Federal Teaching Hospital Katsina", type: "Hospital", state: "Katsina", lga: "Katsina", lat: 12.9908, lng: 7.6018 },
+  { name: "Federal Medical Centre Birnin Kebbi", type: "Hospital", state: "Kebbi", lga: "Birnin Kebbi", lat: 12.453, lng: 4.1975 },
+  { name: "Federal Medical Centre Lokoja", type: "Hospital", state: "Kogi", lga: "Lokoja", lat: 7.7999, lng: 6.7337 },
+  { name: "University of Ilorin Teaching Hospital", type: "Hospital", state: "Kwara", lga: "Ilorin West", lat: 8.4966, lng: 4.5426 },
+  { name: "Lagos Island General Hospital", type: "Hospital", state: "Lagos", lga: "Lagos Island", lat: 6.455, lng: 3.3941 },
+  { name: "Dalhatu Araf Specialist Hospital", type: "Hospital", state: "Nasarawa", lga: "Lafia", lat: 8.4939, lng: 8.5162 },
+  { name: "General Hospital Minna", type: "Hospital", state: "Niger", lga: "Minna", lat: 9.6139, lng: 6.5569 },
+  { name: "Federal Medical Centre Abeokuta", type: "Hospital", state: "Ogun", lga: "Abeokuta South", lat: 7.1475, lng: 3.3619 },
+  { name: "University of Medical Sciences Teaching Hospital", type: "Hospital", state: "Ondo", lga: "Akure South", lat: 7.2508, lng: 5.1958 },
+  { name: "Adeoyo Maternity Teaching Hospital", type: "Hospital", state: "Oyo", lga: "Ibadan North", lat: 7.39, lng: 3.907 },
+  { name: "Jos University Teaching Hospital", type: "Hospital", state: "Plateau", lga: "Jos North", lat: 9.8965, lng: 8.8583 },
+  { name: "Rivers State University Teaching Hospital", type: "Hospital", state: "Rivers", lga: "Port Harcourt", lat: 4.8156, lng: 7.0498 },
+  { name: "Usmanu Danfodiyo University Teaching Hospital", type: "Hospital", state: "Sokoto", lga: "Sokoto North", lat: 13.0059, lng: 5.2476 },
+  { name: "Federal Medical Centre Jalingo", type: "Hospital", state: "Taraba", lga: "Jalingo", lat: 8.8833, lng: 11.3667 },
+  { name: "Federal Teaching Hospital Damaturu", type: "Hospital", state: "Yobe", lga: "Damaturu", lat: 11.7469, lng: 11.9609 },
+  { name: "Federal Medical Centre Gusau", type: "Hospital", state: "Zamfara", lga: "Gusau", lat: 12.1704, lng: 6.6641 },
+  { name: "National Hospital Abuja", type: "Hospital", state: "FCT", lga: "Abuja Municipal", lat: 9.0765, lng: 7.3986 },
+  { name: "Gbagada General Hospital", type: "Hospital", state: "Lagos", lga: "Kosofe", lat: 6.554, lng: 3.388 },
+  { name: "Ikeja Community Clinic", type: "Clinic", state: "Lagos", lga: "Ikeja", lat: 6.6018, lng: 3.3515 },
+  { name: "Kano Central Pharmacy", type: "Pharmacy", state: "Kano", lga: "Fagge", lat: 12.0072, lng: 8.51 },
+  { name: "Kaduna South Clinic", type: "Clinic", state: "Kaduna", lga: "Kaduna South", lat: 10.487, lng: 7.43 },
+  { name: "Braithwaite Memorial Specialist Hospital", type: "Hospital", state: "Rivers", lga: "Port Harcourt", lat: 4.7789, lng: 7.0134 },
+  { name: "Ibadan North Clinic", type: "Clinic", state: "Oyo", lga: "Ibadan North", lat: 7.3964, lng: 3.9167 },
+  { name: "Enugu Central Pharmacy", type: "Pharmacy", state: "Enugu", lga: "Enugu North", lat: 6.4584, lng: 7.5464 }
+];
+
+const stateSelect = document.getElementById("state-select");
+const lgaSelect = document.getElementById("lga-select");
+const facilityResults = document.getElementById("facility-results");
+const findcareControls = document.querySelector(".findcare-controls");
+
+function uniqueStates(){
+  return Array.from(new Set(FACILITIES.map(function(f){ return f.state; }))).sort();
+}
+function lgasForState(state){
+  return Array.from(new Set(FACILITIES.filter(function(f){ return f.state === state; }).map(function(f){ return f.lga; }))).sort();
+}
+
+function populateStateSelect(){
+  const dict = translations[currentLang];
+  stateSelect.innerHTML = "";
+  const allOpt = document.createElement("option");
+  allOpt.value = ""; allOpt.textContent = dict.findcare_all_states;
+  stateSelect.appendChild(allOpt);
+  uniqueStates().forEach(function(s){
+    const opt = document.createElement("option");
+    opt.value = s; opt.textContent = s;
+    stateSelect.appendChild(opt);
+  });
+  populateLgaSelect("");
+}
+
+function populateLgaSelect(state){
+  const dict = translations[currentLang];
+  lgaSelect.innerHTML = "";
+  const allOpt = document.createElement("option");
+  allOpt.value = ""; allOpt.textContent = dict.findcare_all_lgas;
+  lgaSelect.appendChild(allOpt);
+  if(state){
+    lgasForState(state).forEach(function(l){
+      const opt = document.createElement("option");
+      opt.value = l; opt.textContent = l;
+      lgaSelect.appendChild(opt);
+    });
+  }
+}
+
+stateSelect.addEventListener("change", function(){
+  populateLgaSelect(stateSelect.value);
+});
+
+function renderFacilities(list, distanceLabel){
+  facilityResults.innerHTML = "";
+  const dict = translations[currentLang];
+  if(list.length === 0){
+    const p = document.createElement("p");
+    p.id = "record-empty";
+    p.textContent = dict.findcare_no_results;
+    facilityResults.appendChild(p);
+    return;
+  }
+  list.forEach(function(f){
+    const card = document.createElement("div");
+    card.className = "facility-card";
+    const dist = distanceLabel && f._distanceKm !== undefined ? " · " + f._distanceKm.toFixed(1) + " km" : "";
+    card.innerHTML =
+      '<div class="fc-name">' + f.name + '</div>' +
+      '<div class="fc-meta">' + f.lga + ", " + f.state + dist + '</div>' +
+      '<span class="facility-badge">' + f.type + '</span>';
+    facilityResults.appendChild(card);
+  });
+}
+
+function renderFacilityPrompt(){
+  const dict = translations[currentLang];
+  facilityResults.innerHTML = '<p id="record-empty">' + dict.findcare_start + '</p>';
+}
+
+document.getElementById("search-facilities").addEventListener("click", function(){
+  const state = stateSelect.value;
+  const lga = lgaSelect.value;
+  const filtered = FACILITIES.filter(function(f){
+    return (!state || f.state === state) && (!lga || f.lga === lga);
+  });
+  renderFacilities(filtered, false);
+});
+
+// Haversine distance in km
+function distanceKm(lat1, lng1, lat2, lng2){
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+            Math.sin(dLng/2) * Math.sin(dLng/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+// Inject "Use my location" button into the find-care controls
+const locateBtn = document.createElement("button");
+locateBtn.className = "btn btn-ghost";
+locateBtn.type = "button";
+locateBtn.style.color = "#14213D";
+locateBtn.style.border = "1px solid #E4DCC9";
+locateBtn.textContent = translations[currentLang].findcare_locate;
+locateBtn.id = "locate-btn";
+findcareControls.insertBefore(locateBtn, findcareControls.firstChild);
+
+locateBtn.addEventListener("click", function(){
+  const dict = translations[currentLang];
+  if(!navigator.geolocation){
+    alert("Geolocation is not supported on this device/browser.");
+    return;
+  }
+  locateBtn.textContent = dict.findcare_locating;
+  locateBtn.disabled = true;
+
+  navigator.geolocation.getCurrentPosition(
+    function(position){
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+
+      const withDistance = FACILITIES.map(function(f){
+        return Object.assign({}, f, { _distanceKm: distanceKm(userLat, userLng, f.lat, f.lng) });
+      });
+      withDistance.sort(function(a, b){ return a._distanceKm - b._distanceKm; });
+
+      const nearest = withDistance.slice(0, 5);
+
+      // Auto-select the state of the closest facility in the dropdowns
+      if(nearest.length > 0){
+        stateSelect.value = nearest[0].state;
+        populateLgaSelect(nearest[0].state);
+        lgaSelect.value = "";
+      }
+
+      renderFacilities(nearest, true);
+      locateBtn.textContent = dict.findcare_locate;
+      locateBtn.disabled = false;
+    },
+    function(error){
+      let msg = "Could not get your location.";
+      if(error.code === error.PERMISSION_DENIED) msg = "Location permission was denied. You can still search by state and LGA above.";
+      alert(msg);
+      locateBtn.textContent = dict.findcare_locate;
+      locateBtn.disabled = false;
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+});
+
+// ---------- 6. PERSONAL HEALTH RECORDS ----------
+let records = [];
+try {
+  const saved = localStorage.getItem("healthbridge_records");
+  if(saved) records = JSON.parse(saved);
+} catch(e) {
+  records = []; // localStorage unavailable (e.g. sandboxed preview) — falls back to in-memory only
+}
+
+function saveRecordsToStorage(){
+  try {
+    localStorage.setItem("healthbridge_records", JSON.stringify(records));
+  } catch(e) {
+    // silently ignore — records still work in-memory for this session
+  }
+}
+
+const recordType = document.getElementById("record-type");
+const recordTitle = document.getElementById("record-title");
+const recordNotes = document.getElementById("record-notes");
+const recordItems = document.getElementById("record-items");
+const recordEmpty = document.getElementById("record-empty");
+
+document.getElementById("record-add").addEventListener("click", function(){
+  const title = recordTitle.value.trim();
+  if(!title){
+    recordTitle.focus();
+    return;
+  }
+  records.unshift({
+    id: Date.now(),
+    type: recordType.value,
+    title: title,
+    notes: recordNotes.value.trim(),
+    date: new Date().toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+  });
+  recordTitle.value = "";
+  recordNotes.value = "";
+  saveRecordsToStorage();
+  renderRecords();
+});
+
+function renderRecords(){
+  const dict = translations[currentLang];
+  recordItems.innerHTML = "";
+  if(records.length === 0){
+    recordEmpty.textContent = dict.records_empty;
+    recordEmpty.style.display = "block";
+    return;
+  }
+  recordEmpty.style.display = "none";
+  const typeLabels = {
+    symptom: dict.records_type_symptom,
+    medicine: dict.records_type_medicine,
+    vital: dict.records_type_vital
+  };
+  records.forEach(function(r){
+    const card = document.createElement("div");
+    card.className = "record-card";
+    card.innerHTML =
+      '<div>' +
+        '<div class="rc-type">' + (typeLabels[r.type] || r.type) + '</div>' +
+        '<div class="rc-title">' + r.title + '</div>' +
+        (r.notes ? '<div style="font-size:0.85rem;color:#5B6472;margin-top:2px;">' + r.notes + '</div>' : '') +
+        '<div class="rc-date">' + r.date + '</div>' +
+      '</div>';
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "✕";
+    delBtn.setAttribute("aria-label", "Delete record");
+    delBtn.addEventListener("click", function(){
+      records = records.filter(function(item){ return item.id !== r.id; });
+      saveRecordsToStorage();
+      renderRecords();
+    });
+    card.appendChild(delBtn);
+    recordItems.appendChild(card);
+  });
+}
+
+// ---------- 7. INIT ----------
+populateStateSelect();
+applyTranslations("en");
+</script>
+</body>
+</html>
