@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthBridge AI — Ask a Health Worker</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="auth-modal-overlay" class="modal-overlay">
+  <div class="modal-box">
+    <button id="auth-modal-close" class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="login">Log In</button>
+      <button class="modal-tab" data-tab="signup">Sign Up</button>
+      <button class="modal-tab" data-tab="reset">Forgot Password</button>
+    </div>
+
+    <div class="modal-panel" id="panel-login">
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
+      <button class="btn btn-primary" id="login-submit" style="width:100%; justify-content:center;">Log In</button>
+      <p class="auth-msg auth-error" id="login-error"></p>
+    </div>
+
+    <div class="modal-panel" id="panel-signup" style="display:none;">
+      <div class="field"><label>Full name</label><input type="text" id="signup-name" placeholder="Your name"></div>
+      <div class="field"><label>Email</label><input type="email" id="signup-email" placeholder="you@example.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="signup-password" placeholder="At least 6 characters"></div>
+      <button class="btn btn-green" id="signup-submit" style="width:100%; justify-content:center;">Create Account</button>
+      <p class="auth-msg auth-error" id="signup-error"></p>
+    </div>
+
+    <div class="modal-panel" id="panel-reset" style="display:none;">
+      <p style="font-size:0.85rem; color:var(--text-soft); margin-bottom:14px;">We'll send a password reset link to your email.</p>
+      <div class="field"><label>Email</label><input type="email" id="reset-email" placeholder="you@example.com"></div>
+      <button class="btn btn-ghost" id="reset-submit" style="width:100%; justify-content:center; color:var(--ink); border:1px solid var(--line);">Send reset link</button>
+      <p class="auth-msg" id="reset-message"></p>
+    </div>
+  </div>
+</div>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<div class="emergency-bar">
+  <span id="emergency-text">In a medical emergency, call your local emergency number now.</span>
+  <button id="emergency-btn" type="button">Emergency numbers</button>
+</div>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand" style="text-decoration:none;">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none">
+        <path d="M4 22 Q16 8 28 22" stroke="#E8A33D" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="4" cy="24" r="3" fill="#2F6F4E"/>
+        <circle cx="28" cy="24" r="3" fill="#fff"/>
+      </svg>
+      <span>HealthBridge<span style="color:#E8A33D">AI</span></span>
+    </a>
+    <div class="nav-right">
+      <button id="account-btn" class="nav-account-btn">Sign In</button>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">☰</button>
+    </div>
+  </div>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html" data-i18n="nav_home">Home</a>
+    <a href="checker.html" data-i18n="nav_checker">Symptom Guidance</a>
+    <a href="findcare.html" data-i18n="nav_findcare">Find Care</a>
+    <a href="records.html" data-i18n="nav_records">My Records</a>
+    <a href="maternal.html" data-i18n="nav_maternal">Maternal &amp; Child</a>
+    <a href="adulthealth.html" data-i18n="nav_adult">Adult Health</a>
+    <a href="firstaid.html" data-i18n="nav_firstaid">First Aid</a>
+    <a href="tips.html" data-i18n="nav_tips">Health Tips</a>
+    <a href="appointment.html" data-i18n="nav_appointment">Book Visit</a>
+    <a href="pharmacy.html" data-i18n="nav_pharmacy">Pharmacy</a>
+    <a href="community.html" data-i18n="nav_community">Q&amp;A</a>
+    <div class="nav-links-divider"></div>
+    <div class="lang-switch" role="group" aria-label="Choose language">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ha">HA</button>
+      <button class="lang-btn" data-lang="yo">YO</button>
+      <button class="lang-btn" data-lang="ig">IG</button>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Choose theme">
+      <button class="lang-btn theme-btn active" data-theme="light" title="Light">☀️</button>
+      <button class="lang-btn theme-btn" data-theme="dark" title="Dark">🌙</button>
+      <button class="lang-btn theme-btn" data-theme="forest" title="Forest">🌿</button>
+      <button class="lang-btn theme-btn" data-theme="sunrise" title="Sunrise">🌅</button>
+    </div>
+  </div>
+</nav>
+
+
+<main id="main">
+<div class="container" style="padding-top:28px;"><a href="index.html" class="back-home">&larr; Back to Home</a></div>
+  <section id="community">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="community_eyebrow">Ask, learn, share</div>
+        <h2 data-i18n="community_head">Ask a Health Worker</h2>
+        <p data-i18n="community_sub" >Post a general health question. Saved on this device for now.</p>
+      </div>
+      <div class="qa-wrap">
+        <div class="qa-form">
+          <textarea id="qa-input" data-i18n-placeholder="community_placeholder" placeholder="Type your question..."></textarea>
+          <button class="btn btn-green" id="qa-submit" data-i18n="community_submit_btn">Post</button>
+        </div>
+        <div id="qa-list"></div>
+        <p class="qa-note" id="qa-sync-status" data-i18n="community_note">Questions here are saved only on your device for this demo. A live version would connect everyone through a shared server.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">HealthBridge AI</div>
+    <div data-i18n="footer_text">Not a substitute for professional medical care. Always consult a qualified health worker.</div>
+  </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
