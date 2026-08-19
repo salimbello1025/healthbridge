@@ -80,7 +80,7 @@ The EN/HA/YO/IG switcher is real and functional — it translates navigation lab
 ## Getting Started Locally
 
 ```bash
-git clone https://github.com/<your-username>/healthbridge.git
+git clone https://github.com/<Salimbello1025>/healthbridge.git
 cd healthbridge
 ```
 
